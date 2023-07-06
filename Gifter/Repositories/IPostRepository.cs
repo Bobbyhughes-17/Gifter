@@ -11,5 +11,9 @@ namespace Gifter.Repositories
         void Update(Post post);
         void Delete(int id);
         List<Post> GetAllWithComments();
+        Post GetPostByIdWithComments(int id);
+        List<Post> Search(string criterion, bool sortDescending);
+        List<Post> GetHottestPosts(DateTime since);
+
     }
 }
