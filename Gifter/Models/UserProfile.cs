@@ -19,6 +19,7 @@ namespace Gifter.Models
         [Required]
         public DateTime DateCreated { get; set; }
         public string Bio { get; set; }
+        List<Post> Posts { get; set; }
 
     }
 }

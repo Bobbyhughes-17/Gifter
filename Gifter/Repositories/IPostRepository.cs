@@ -7,6 +7,7 @@ namespace Gifter.Repositories
     {
         List<Post> GetAll();
         Post GetById(int id);
+        
         void Add(Post post);
         void Update(Post post);
         void Delete(int id);
@@ -14,6 +15,6 @@ namespace Gifter.Repositories
         Post GetPostByIdWithComments(int id);
         List<Post> Search(string criterion, bool sortDescending);
         List<Post> GetHottestPosts(DateTime since);
-
+       
     }
 }

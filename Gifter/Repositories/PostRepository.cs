@@ -306,6 +306,8 @@ namespace Gifter.Repositories
             }
         }
 
+   
+
         public List<Post> GetHottestPosts(DateTime since)
         {
             using (var conn = Connection)
