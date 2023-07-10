@@ -14,7 +14,7 @@ namespace Gifter.Models
         [Required]
         public string ImageUrl { get; set; }
 
-        public string Caption { get; set; }
+        public string? Caption { get; set; }
 
         [Required]
         public DateTime DateCreated { get; set; }
@@ -22,9 +22,9 @@ namespace Gifter.Models
         [Required]
         public int UserProfileId { get; set; }
 
-        public UserProfile UserProfile { get; set; }
+        public UserProfile? UserProfile { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
 
     }
 }

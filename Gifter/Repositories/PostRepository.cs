@@ -364,6 +364,7 @@ namespace Gifter.Repositories
 
         public void Add(Post post)
         {
+
             using (var conn = Connection)
             {
                 conn.Open();

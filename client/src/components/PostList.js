@@ -1,41 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
-import { PostContext } from "../providers/PostProvider";
-import Post from "./Post";
+import React, { useState, useEffect } from "react";
+import { getAllPosts } from "../APIManagers/PostManager";
+import { Post } from "./Post";
 
 const PostList = () => {
-  const { posts, getAllPosts, searchPosts } = useContext(PostContext);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortDescending, setSortDescending] = useState(false);
+  const [posts, setPosts] = useState([]);
+
+  const getPosts = () => {
+    getAllPosts().then(allPosts => setPosts(allPosts)); 
+  };
 
   useEffect(() => {
-    getAllPosts();
-  }, []);
-
-  const handleSearch = () => {
-    searchPosts(searchTerm, sortDescending);
-  };
+    getPosts();
+  }, []); 
 
   return (
     <div className="container">
       <div className="row justify-content-center">
         <div className="cards-column">
-          <div className="mb-4">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search posts..."
-            />
-            <label>
-              <input
-                type="checkbox"
-                checked={sortDescending}
-                onChange={(e) => setSortDescending(e.target.checked)}
-              />
-              Sort Descending
-            </label>
-            <button onClick={handleSearch}>Search</button>
-          </div>
           {posts.map((post) => (
             <Post key={post.id} post={post} />
           ))}

@@ -1,66 +1,142 @@
-import React, { useState, useContext } from "react";
-import { PostContext } from "../providers/PostProvider";
+import { useState } from "react";
+import { addPost, searchPosts } from "../APIManagers/PostManager";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 
-const PostForm = () => {
-  const { addPost } = useContext(PostContext);
-  const [title, setTitle] = useState("");
-  const [caption, setCaption] = useState("");
+export const PostForm = () => {
+  const [newPost, update] = useState({
+    title: "",
+    imageUrl: "",
+    caption: "",
+    userProfileId: 1,
+    dateCreated: Date.now(),
+  });
 
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
-  const handleCaptionChange = (e) => {
-    setCaption(e.target.value);
-  };
+  const handleSaveButtonClick = (event) => {
+    event.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newPost = {
-      title: title,
-      caption: caption,
+    const postToSendToAPI = {
+      Title: newPost.title,
+      Caption: newPost.caption,
+      ImageUrl: newPost.imageUrl,
+      DateCreated: new Date().toISOString(),
+      UserProfileId: 1,
     };
 
-    addPost(newPost)
+    addPost(postToSendToAPI)
       .then(() => {
-        setTitle("");
-        setCaption("");
+        update({
+          title: "",
+          imageUrl: "",
+          caption: "",
+          userProfileId: 1,
+          dateCreated: Date.now(),
+        });
+
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error adding post:", error);
       });
   };
 
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchButtonClick = (event) => {
+    event.preventDefault();
+
+    searchPosts(searchQuery)
+      .then((response) => {
+        setSearchResults(response);
+      })
+      .catch((error) => {
+        console.error("Error searching posts:", error);
+      });
+  };
+
   return (
     <div>
-      <h2>Add New Post</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title:</label>
-          <input
+      <Form className="post-form">
+        <h2 className="post-form-title">Create a New Post</h2>
+        <FormGroup>
+          <Label for="title">Title:</Label>
+          <Input
             type="text"
             id="title"
-            value={title}
-            onChange={handleTitleChange}
-            required
+            value={newPost.title}
+            onChange={(event) => {
+              const copy = { ...newPost };
+              copy.title = event.target.value;
+              update(copy);
+            }}
           />
-        </div>
-        <div>
-          <label htmlFor="caption">Caption:</label>
-          <textarea
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="caption">Caption:</Label>
+          <Input
+            type="text"
             id="caption"
-            value={caption}
-            onChange={handleCaptionChange}
-            required
-          ></textarea>
-        </div>
+            value={newPost.caption}
+            onChange={(event) => {
+              const copy = { ...newPost };
+              copy.caption = event.target.value;
+              update(copy);
+            }}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label for="imageUrl">Image Url:</Label>
+          <Input
+            type="text"
+            id="imageUrl"
+            value={newPost.imageUrl}
+            onChange={(event) => {
+              const copy = { ...newPost };
+              copy.imageUrl = event.target.value;
+              update(copy);
+            }}
+          />
+        </FormGroup>
+
+        <Button onClick={handleSaveButtonClick} color="primary">
+          Submit Post
+        </Button>
+      </Form>
+      <Form className="post-form">
+        <FormGroup>
+          <Label for="searchQuery">Search:</Label>
+          <Input
+            type="text"
+            id="searchQuery"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+        </FormGroup>
+
+        <Button onClick={handleSearchButtonClick} color="primary">
+          Search
+        </Button>
+      </Form>
+      {searchResults.length > 0 && (
         <div>
-          <button type="submit">Submit</button>
+          <h3>Search Results:</h3>
+          <ul>
+            {searchResults.map((post) => (
+              <li key={post.id}>
+                <h4>{post.title}</h4>
+                <p>Caption: {post.caption}</p>
+                <img src={post.imageUrl} alt={post.title} />
+              </li>
+            ))}
+          </ul>
         </div>
-      </form>
+      )}
     </div>
   );
 };
-
-export default PostForm;
