@@ -37,9 +37,7 @@ export const PostForm = () => {
 
         window.location.reload();
       })
-      .catch((error) => {
-        console.error("Error adding post:", error);
-      });
+      
   };
 
   const handleSearchInputChange = (event) => {
@@ -53,9 +51,7 @@ export const PostForm = () => {
       .then((response) => {
         setSearchResults(response);
       })
-      .catch((error) => {
-        console.error("Error searching posts:", error);
-      });
+    
   };
 
   return (
@@ -126,15 +122,15 @@ export const PostForm = () => {
       {searchResults.length > 0 && (
         <div>
           <h3>Search Results:</h3>
-          <ul>
+          <div>
             {searchResults.map((post) => (
-              <li key={post.id}>
+              <div key={post.id}>
                 <h4>{post.title}</h4>
                 <p>Caption: {post.caption}</p>
                 <img src={post.imageUrl} alt={post.title} />
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import React from "react";
 
 const baseUrl = '/api/Post';
+const commentUrl = '/api/Post/GetWithComments';
 
 export const getAllPosts = () => {
   return fetch(baseUrl) 
@@ -27,5 +28,8 @@ export const searchPosts = (query, sortDesc) => {
     });
 };
 
-
+export const getAllPostsWithComments = () => {
+  return fetch(`${baseUrl}/GetWithComments`) 
+    .then((res) => res.json())
+};
 
